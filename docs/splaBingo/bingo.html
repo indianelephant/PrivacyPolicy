@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    
+    <body>
+        <h1>hoge</h1>
+        
+        <table border="1" width="1200" height="150">
+            
+            <!-- 1列目 -->
+            <tr>
+                <th>
+                    <label><input class="rCheckBox" type="checkbox" value="String" id="resultRowCheckbox"><span>バトル No.1</span></label>
+                </th>
+                
+                <th>
+                    <label><input class="rCheckBox" type="checkbox" value="String" id="resultRowCheckbox"><span>バトル No.1</span></label>
+                </th>
+                
+                <th>
+                    <label><input class="rCheckBox" type="checkbox" value="String" id="resultRowCheckbox"><span>バトル No.1</span></label>
+                </th>
+                
+                <th>
+                    <label><input class="rCheckBox" type="checkbox" value="String" id="resultRowCheckbox"><span>バトル No.1</span></label>
+                </th>
+                
+                <th>
+                    <label><input class="rCheckBox" type="checkbox" value="String" id="resultRowCheckbox"><span>バトル No.1</span></label>
+                </th>
+            </tr>
+        </table>
+        
+        
+    </body>
+</html>
+
+
+<script type="text/javascript" language="javascript">
+    
+    // 列（タテ）のチェックボックスの数
+    let columnLength = 1;
+    // 行（ヨコ）のチェックボックスの数
+    let rowLength = 5;
+    
+    // チェックボックスの要素
+    var checkBox = document.getElementsByClassName("rCheckBox");
+    
+    var resultData = [][];
+    
+    // 初期化系
+    init();
+    
+    // 初期化系
+    function init() {
+        // チェックボックス初期化
+        initCheckBox();
+        // 表彰データ読み込み
+        initResultData();
+        
+    }
+    
+    // チェックボックス初期化
+    function initCheckBox() {
+        for(var c=0; c<= columnLength-1;c++){
+            for(var r=0; r<= rowLength-1; r++){
+                // チェックボックスの行列を計算して左上から順に初期化を行う
+                var n = c * columnLength + r;
+                
+                checkBox[n].setAttribute("id", "rCheckBox" + n);
+                checkBox[n].addEventListener('change', valueChange);
+            }
+        }
+    }
+    
+    // 表彰データ読み込み
+    function initResultData() {
+        // CSVファイルを取得
+        let csv = new XMLHttpRequest();
+        // CSVファイルへのパス
+        csv.open("GET", "resultBingoResult.csv", false);
+        // csvファイル読み込み失敗時のエラー対応
+        try {
+          csv.send(null);
+        } catch (err) {
+          console.log(err);
+        }
+        // 配列を定義
+        let csvArray = [];
+        // 改行ごとに配列化
+        let lines = csv.responseText.split(/\r\n|\n/);
+        // 1行ごとに処理
+        for (let i = 0; i < lines.length; ++i) {
+          let cells = lines[i].split(",");
+          if (cells.length != 1) {
+            csvArray.push(cells);
+          }
+        }
+        // コンソールに配列を出力
+        console.log(csvArray);
+    }
+    
+    // チェックボックスの値が変わった時
+    function valueChange() {
+        console.log("=== valueChange() ===");
+        
+        // ログ出し
+        loggerValueCheckBox();
+        
+        // タテ列CheckBox
+        
+        
+        
+        // ヨコ列CheckBox
+        //validateRowCheckBoxs();
+        
+        
+    }
+    
+    // ログだし
+    function loggerValueCheckBox() {
+        console.log("=== loggerValueCheckBox() ===");
+        for(var c=0; c<= columnLength-1;c++){
+            for(var r=0; r<= rowLength-1; r++){
+                var n = c * columnLength + r;
+                
+                let moji = "rCheckBox" + n;
+                
+                if(checkBox[n].checked == false) {
+                    checkBox[n].css("text-decoration", "line-through");
+                } else {
+                    checkBox[n].css("text-decoration", "none");
+                }
+                
+                let checked = checkBox[n].checked;
+                
+                console.log(moji + checked);
+            }
+        }
+    }
+    
+    // ヨコ列CheckBoxの状態判定
+    function validateRowCheckBoxs() {
+        console.log("=== validateRowCheckBoxs() ===");
+        
+        for(var c=0; c<= columnLength-1;c++){
+            for(var r=0; r<= rowLength-1; r++){
+                var n = c * columnLength + r;
+                
+                let moji = "rCheckBox" + n;
+                let checked = checkBox[n].checked;
+                
+                console.log(moji + checked);
+            }
+        }
+    }
+</script>
